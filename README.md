@@ -12,25 +12,41 @@ A [Pi](https://github.com/earendil-works/pi) extension that shows output-token t
 
 ## Install
 
-Try it directly from this checkout:
+Install globally from GitHub (recommended):
+
+```bash
+pi install git:github.com/yang-dongxu/pi-speed
+```
+
+You can also use the repository URL:
+
+```bash
+pi install https://github.com/yang-dongxu/pi-speed
+```
+
+To install only for the current project, run this from that project directory:
+
+```bash
+pi install -l git:github.com/yang-dongxu/pi-speed
+```
+
+To try it without installing:
+
+```bash
+pi -e git:github.com/yang-dongxu/pi-speed
+```
+
+Then start Pi, or run `/reload` if Pi is already open. To update the installed extension later:
+
+```bash
+pi update git:github.com/yang-dongxu/pi-speed
+```
+
+For local development from a clone:
 
 ```bash
 pi -e ./extensions/pi-speed.ts
 ```
-
-Or install the package locally:
-
-```bash
-pi install /absolute/path/to/pi-speed
-```
-
-For project-local installation:
-
-```bash
-pi install -l /absolute/path/to/pi-speed
-```
-
-Then start Pi (or run `/reload` if Pi is already open).
 
 ## Usage
 
