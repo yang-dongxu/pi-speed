@@ -39,6 +39,44 @@ export type WindowParseResult =
   | { ok: true; windows: WindowSpec[] }
   | { ok: false; error: string };
 
+/** Which sessions a report covers: the main session, its subagents, or both. */
+export type SampleScope = "all" | "main" | "sub";
+
+export type ReportParseResult =
+  | { ok: true; scope: SampleScope; windows: WindowSpec[] }
+  | { ok: false; error: string };
+
+const SCOPE_KEYWORDS: Record<string, SampleScope> = {
+  all: "all",
+  main: "main",
+  sub: "sub",
+  subagent: "sub",
+  subagents: "sub",
+};
+
+/**
+ * Parse `/speed` arguments: optional scope keyword plus rolling windows.
+ * Scope defaults to `all`, which includes subagent responses.
+ */
+export function parseReportArguments(input: string): ReportParseResult {
+  const tokens = input.trim().split(/[\s,]+/).filter(Boolean);
+  const windowTokens: string[] = [];
+  let scope: SampleScope = "all";
+
+  for (const token of tokens) {
+    const keyword = SCOPE_KEYWORDS[token.toLowerCase()];
+    if (keyword) {
+      scope = keyword;
+      continue;
+    }
+    windowTokens.push(token);
+  }
+
+  const parsed = parseWindowArguments(windowTokens.join(" "));
+  if (!parsed.ok) return parsed;
+  return { ok: true, scope, windows: parsed.windows };
+}
+
 export function parseWindowArguments(input: string): WindowParseResult {
   const parsedArguments = input.trim().split(/[\s,]+/).filter(Boolean);
   const arguments_ = parsedArguments.length > 0 ? parsedArguments : [...DEFAULT_WINDOW_ARGUMENTS];
